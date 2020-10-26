@@ -1,32 +1,65 @@
 <template>
   <div id="app">
-    <div id="nav">
-      <router-link to="/">Home</router-link> |
-      <router-link to="/about">About</router-link>
-    </div>
     <router-view/>
+    <van-tabbar active-color="rgb(254, 64, 112)" route v-if="$route.path !=='/login' && $route.path !=='/register'">
+      <van-tabbar-item replace to="/home" icon="home-o">
+        首页
+      </van-tabbar-item>
+      <van-tabbar-item replace to="/group" icon="friends-o">
+        团购
+      </van-tabbar-item>
+      <van-tabbar-item replace to="/shopcart" icon="shopping-cart-o">
+        购物车
+      </van-tabbar-item>
+      <van-tabbar-item replace to="/mine" icon="manager-o">
+        我的
+      </van-tabbar-item>
+    </van-tabbar>
   </div>
 </template>
 
+<script>
+export default {
+  data() {
+    return {
+      
+    }
+  }
+}
+</script>
+
 <style>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
+* {
+  margin: 0;
+  padding: 0;
 }
 
-#nav {
-  padding: 30px;
+html {
+  font-size: 26.666667vw;
 }
 
-#nav a {
-  font-weight: bold;
-  color: #2c3e50;
+body {
+  font-size: 0.12rem;
 }
 
-#nav a.router-link-exact-active {
-  color: #42b983;
+.clear:after, .clearfloat:after {
+  display: block;
+  clear: both;
+  content: "";
+  visibility: hidden;
+  height: 0;
+}
+
+#app >div:first-child {
+  position: absolute;
+  top: 0;
+  bottom: 50px;
+  left: 0;
+  right: 0;
+  overflow: auto;
+}
+
+#app >div:first-child::-webkit-scrollbar {
+  display: none;
 }
 </style>

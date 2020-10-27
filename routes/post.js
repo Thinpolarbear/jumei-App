@@ -11,6 +11,7 @@ router.get('/cmsList' , ControllerPost.cmsList)
 router.get('/cmsFind' , ControllerPost.cmsFind)
 router.get('/cmsUpdate' , ControllerPost.cmsUpdate)
 router.get('/cmsRemove' , ControllerPost.cmsRemove)
+router.get('/shops' , ControllerPost.shops)
 router.get('/list' , ControllerPost.list)
 
 module.exports = router

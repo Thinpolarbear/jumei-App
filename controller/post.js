@@ -182,7 +182,7 @@ var cmsRemove = (req,res,next) => {
 }
 var list = (req,res,next) => {
   var type = req.query.postType
-  PostModel.find({type}).sort({date : -1}).then((info) => {
+  PostModel.find({postType : type}).sort({date : -1}).then((info) => {
     if(info){
       res.json({
         code : 0,
@@ -204,11 +204,38 @@ var list = (req,res,next) => {
     })
   })
 }
+var shops = (req,res,next) => {
+  var goodsShop = req.query.goodsShop
+  console.log(goodsShop);
+  PostModel.find({goodsShop}).then((info) => {
+    console.log(info);
+    if(info){
+      res.json({
+        code : 0,
+        errmsg : 'ok',
+        info
+      })
+    }else{
+      es.json({
+        code : -1,
+        errmsg : 'nothing',
+        info : []
+      })
+    }
+  }).catch((err) => {
+    es.json({
+      code : -1,
+      errmsg : 'nothing',
+      info : []
+    })
+  })
+}
 module.exports = {
   add,
   cmsList,
   cmsFind,
   cmsUpdate,
   cmsRemove,
-  list
+  list,
+  shops
 }

@@ -1,10 +1,21 @@
 var UserModel = require('../model/user')
 var jwt = require('jsonwebtoken')
+var getCrypto = require('../common/crypto')
 
 var register = (req,res,next) => {
-   var body = req.body
-   console.log(body);
-   UserModel(body).save().then((info) => {
+   var {username , password , checkCode} = req.body
+   if(checkCode !== req.session.captcha){
+     res.json({
+       code : -1,
+       errmsg : 'checkCode err'
+     })
+     return ;
+   }
+   UserModel({
+     username , 
+     password : getCrypto(password)
+   }).save().then((info) => {
+     console.log("111");
      if(info){
        res.json({
          code : 0,
@@ -19,6 +30,8 @@ var register = (req,res,next) => {
       })
      }
    }).catch((err) => {
+    console.log("222");
+    console.log(err);
     res.json({
       code : -1,
       errmsg : 'register err',
@@ -27,12 +40,21 @@ var register = (req,res,next) => {
    })
 }
 var login = (req,res,next) => {
-  var body = req.body
-  UserModel.findOne(body).then((info) => {
+  var {username , password ,checkCode} = req.body
+  if(checkCode !== req.session.captcha){
+    res.json({
+      code : -1,
+      errmsg : 'checkCode err'
+    })
+    return ;
+  }
+  UserModel.findOne({
+    username ,
+    password : getCrypto(password)
+  }).then((info) => {
     if(info){
-
       jwt.sign({
-        username : body.username
+        username : username
       } , 'abcdefg' , {expiresIn : 60 * 60 * 3 } , (err , token) => {
         res.json({
           code : 0,

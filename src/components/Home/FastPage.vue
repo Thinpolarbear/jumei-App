@@ -18,7 +18,7 @@
               <span>今日团购，每天10点上新</span>
           </div>
           <ul class="list">
-              <li v-for="item in goodList" :key="item">
+              <li v-for="item in list" :key="item.id">
                   <a href="javascript:void(0)">
                     <div class="product-info clear">
                         <div class="product-img">
@@ -27,11 +27,11 @@
                         </div>
                         <div class="product-desc">
                             <div class="name">
-                                韩国LEADERS丽得姿美蒂优氨基酸面膜10片*3盒
+                                {{ item.goodsName }}
                             </div>
                             <div class="price">
-                                <span class="now-price">￥<span>{{ item }}</span></span>
-                                <span class="del-price">￥{{ item }}</span>
+                                <span class="now-price">￥<span>{{ item.goodsNewPrice }}</span></span>
+                                <span class="del-price">￥{{ item.goodsOldPrice }}</span>
                             </div>
                         </div>
                     </div>
@@ -46,8 +46,15 @@
 export default {
     data() {
         return {
-            goodList: 3,
+            list: [],
         }
+    },
+    created() {
+        this.$axios.get('/api/post/list',{ params : { goodsType : "极速免税" } }).then(res => {
+            this.list = res.data.info;
+        }).catch(err => {
+            console.log(err);
+        })
     }
 }
 </script>
@@ -173,6 +180,27 @@ export default {
                                     word-break: break-all;
                                     word-wrap: break-word;
                                     overflow: hidden;
+                                }
+
+                                .price {
+                                    font-size: .13rem;
+                                    position: absolute;
+                                    color: #999;
+                                    bottom: .12rem;
+                                    left: 0;
+
+                                    .now-price {
+                                        color: #fe4070;
+
+                                        span {
+                                            font-size: .18rem;
+                                        }
+                                    }
+
+                                    .del-price {
+                                        margin-left: 0.035rem;
+                                        text-decoration: line-through
+                                    }
                                 }
                             }
                         }

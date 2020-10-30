@@ -14,8 +14,8 @@
         <van-field
             v-model="username"
             name="username"
-            placeholder="已注册的手机号/邮箱/用户名"
-            :rules="[{ required: true, message: '请填写用户名' }]"
+            placeholder="已注册的账号"
+            :rules="[{ required: true, message: '请输入账号' }]"
         />
         <van-field
             v-model="password"
@@ -24,6 +24,15 @@
             placeholder="6-16位登录密码"
             :rules="[{ required: true, message: '请填写密码' }]"
         />
+        <van-field
+            class="checkCode"
+            v-model="checkCode"
+            type="text"
+            name="checkCode"
+            placeholder="请输入下图验证码"
+            :rules="[{ required: true, message: '请填写验证码' }]"
+        />
+        <img :src="checkImg" alt="" ref="checkImg" @click="changeSrc">
         <div style="margin: 16px;">
             <van-button round block type="info" native-type="submit" color="#feb2c5">
             登录
@@ -39,7 +48,12 @@ export default {
         return {
         username: '',
         password: '',
+        checkCode: '',
+        checkImg: '',
         };
+    },
+    created() {
+        this.changeSrc();
     },
     methods: {
         changeState() {
@@ -49,15 +63,32 @@ export default {
             history.go(-1)
         },
         onSubmit(values) {
-            console.log('submit', values);
-            this.$axios.post('/api/app/login', {
-                username : 'qwe',
-                password : 123
+            this.$axios.post('/api/users/login', {
+                username : this.username,
+                password : this.password,
+                checkCode : this.checkCode,
             }).then(res => {
-                console.log(res);
+                if(res.data.code == 0) {
+                    this.$router.push('/home')
+                    this.$notify({type : 'success', message : '登录成功'})
+                    this.$store.commit('SET_USERNAME',this.username)
+                    localStorage.setItem('token',res.data.token);
+                    localStorage.setItem('username',this.username);
+                } else {
+                    if(res.data.errmsg.indexOf('checkCode') > -1) {
+                        this.$notify({type : 'danger', message : '验证码错误'})
+                        this.changeSrc();
+                    } else {
+                        this.$notify({type : 'danger', message : '账号密码错误'})
+                    }
+                }
             }).catch(err => {
                 console.log(err);
+                this.$notify({type : 'danger', message : '登录失败'})
             })
+        },
+        changeSrc() {
+            this.checkImg='/api/users/checkCode?'+Math.random();
         },
     },
 }
@@ -100,6 +131,17 @@ export default {
     #loginForm .van-cell::after {
         border: none;
     }
+/* 
+    #loginForm .checkCode {
+        width: 1.6rem;
+    }
+
+    .checkImg {
+        position: absolute;
+        right: .1rem;
+        top: 1.85rem;
+        width: 1.2rem;
+    } */
 
     #loginForm .van-field__error-message {
         position: absolute;

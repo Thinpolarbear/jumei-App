@@ -10,12 +10,37 @@
       </div>
     </header>
     <div class="content">
-      <div class="user-unlogin">
+      <div class="user-unlogin" v-if="!username">
         <div class="head-img"></div>
         <div class="operation">
           <router-link to="/register">注册</router-link>
           <span>|</span>
           <router-link to="/login">登录</router-link>
+        </div>
+      </div>
+
+      <div class="logged" v-else>
+        <img src="http://p0.jmstatic.com/jmstore/user/icon/chook_200_200.png?1603757301" alt="">
+        <div class="bg">
+          <div class="user-info">
+            <span class="name">{{ username }}</span>
+            <span class="grade">普通会员</span>
+          </div>
+        </div>
+
+        <div class="icons">
+          <a href="javascript:void(0)">
+            <div class="icon"></div>
+            <span>心愿单</span>
+          </a>
+          <a href="javascript:void(0)">
+            <div class="icon"></div>
+            <span>开售提醒</span>
+          </a>
+          <a href="javascript:void(0)">
+            <div class="icon"></div>
+            <span>收藏</span>
+          </a>
         </div>
       </div>
 
@@ -68,7 +93,7 @@
             <span class="custom-title">收货地址</span>
           </template>
         </van-cell>
-        <van-cell is-link>
+        <van-cell is-link @click="logout">
           <template #title>
             <van-icon class="icon share" name="share-o" size=".24rem"/>
             <span class="custom-title">退出登录</span>
@@ -92,9 +117,23 @@
 
 <script>
 export default {
+  data() {
+    return {
+      username : '',
+    }
+  },
+  created() {
+    this.username = localStorage.getItem('username');
+  },
   methods: {
     toOrder() {
       console.log("to");
+    },
+    logout() {
+      localStorage.removeItem('token');
+      localStorage.removeItem('username');
+      this.$store.commit('REMOVE_USERNAME');
+      this.$router.push('/login');
     }
   }
 }
@@ -196,6 +235,96 @@ export default {
             height: 0.175rem;
             color: #fff;
             font-size: .2rem;
+          }
+        }
+      }
+
+      .logged {
+        position: relative;
+        width: 100%;
+        height: 1.8rem;
+        background: #fff;
+
+        img {
+          width: 0.7529rem;
+          height: 0.7529rem;
+          display: block;
+          border-radius: 50%;
+          position: absolute;
+          left: 0.3765rem;
+          top: 0.8471rem;
+          z-index: 10;
+        }
+
+        .bg {
+          position: absolute;
+          width: 100%;
+          height: 1.2471rem;
+          background-image: linear-gradient(-204deg,#fd465f 0,#fc5e9f 100%);
+
+          .user-info {
+            font-size: 0.1412rem;
+            color: #fff;
+            position: absolute;
+            left: 1.3176rem;
+            bottom: 0.0471rem;
+
+            .name {
+              display: block;
+              font-family: sans-serif;
+              line-height: 0.2353rem;
+              font-size: 0.1529rem;
+            }
+
+            .grade {
+              background: rgba(255,255,255,.2);
+              border-radius: 1.1765rem;
+              letter-spacing: 0.0076rem;
+              line-height: 0.2118rem;
+              padding: 0.0353rem 0.0588rem;
+            }
+          }
+        }
+
+        .icons {
+          width: 2.7059rem;
+          height: 0.5882rem;
+          position: absolute;
+          bottom: 0;
+          right: 0;
+          font-size: 0.1412rem;
+          text-align: center;
+
+          a {
+            display: block;
+            width: 0.8941rem;
+            height: 0.5882rem;
+            float: left;
+            color: #666;
+
+            .icon {
+              width: 0.2118rem;
+              height: 0.2118rem;
+              background-size: 0.2rem 0.2rem;
+              margin: 0.0824rem auto;
+              background-repeat: no-repeat;
+              background-image: url('https://f2.jmstatic.com/static_account/dist/v1.0.179196/images/mobile_usercenter/myjumei/wishlist.png');
+            }
+
+          }
+
+          a:nth-child(2) {
+
+            .icon {
+              background-image: url('https://f2.jmstatic.com/static_account/dist/v1.0.179196/images/mobile_usercenter/myjumei/onsale.png');
+            }
+          }
+
+          a:nth-child(3) {
+
+            .icon {
+              background-image: url('https://f2.jmstatic.com/static_account/dist/v1.0.179196/images/mobile_usercenter/myjumei/fav.png');
+            }
           }
         }
       }

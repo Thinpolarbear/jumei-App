@@ -24,6 +24,9 @@ export default {
     return {
       
     }
+  },
+  created() {
+    // this.$axios.post('/api')
   }
 }
 </script>
@@ -61,5 +64,11 @@ body {
 
 #app >div:first-child::-webkit-scrollbar {
   display: none;
+}
+
+#app .single-page {
+  bottom: 0!important;
+  z-index: 9;
+  background: #f5f5f5;
 }
 </style>

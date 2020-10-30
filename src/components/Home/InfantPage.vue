@@ -18,20 +18,20 @@
       <span>疯抢专场 早10点上新</span>
     </h2>
     <ul class="list">
-      <li v-for="item in list" :key="item">
+      <li v-for="item in list" :key="item.postId">
         <a href="javascript:void(0)" class="clear">
           <div class="list-img">
-            <img src="http://mp5.jmstatic.com//jmstore/image/000/002/2750_std/5f51e4b2b626d_1024_512.jpg?1603358111&imageView2/2/w/640/q/90" alt="">
+            <img :src="item.activeImage && item.activeImage.replace('localhost','10.20.159.146')">
             <div class="discount">
               <p>满199减100</p>
             </div>
           </div>
           <div class="list-info">
-            <p class="title">亲润品牌专场</p>
+            <p class="title">{{ item.activeName }}</p>
             <p class="time">剩余<span>01天</span><span>09时</span></p>
           </div>
           <div class="list-logo">
-            <img src="http://p0.jmstatic.com/brand/logo_180/11325.jpg" alt="">
+            <img :src="item.smIcon">
           </div>
         </a>
       </li>
@@ -43,8 +43,17 @@
 export default {
   data() {
     return {
-      list : 5,
+      list : [],
     }
+  },
+  created() {
+    this.$axios.get('/api/active/list',{ params : { activeType : "母婴" } }).then(res => {
+      console.log(res.data);
+      this.list = res.data.info;
+      console.log(this.list);
+    }).catch(err => {
+      console.log(err);
+    })
   }
 }
 </script>

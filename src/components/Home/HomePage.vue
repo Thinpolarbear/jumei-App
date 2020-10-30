@@ -5,24 +5,23 @@
         今日十点上新
       </span>
     </div>
-    <a class="link-item" href="javascript:void(0)" v-for="item in linkList" :key="item">
-        <div class="pic-wrapper">
-          {{ item }}
-          <img src="" alt="">
-        </div>
+    <a class="link-item" href="javascript:void(0)" v-for="item in linkList" :key="item.postId">
+      <div class="pic-wrapper">
+        <img :src="item.activeImage.replace('localhost','10.20.159.146')" alt="">
+      </div>
     </a>
-    <a class="link-item good-item" href="javascript:void(0)" v-for="item in goodList" :key="item.id">
-        <div class="pic-wrapper">
-          <img src="" alt="">
+    <router-link class="link-item good-item" :to="'/detail/'+item.postId" v-for="item in goodList" :key="item.id">
+      <div class="pic-wrapper">
+        <img :src="item.imageUrl" alt="">
+      </div>
+      <div class="item-detail">
+        <div class="product-title">{{ item.goodsName }}</div>
+        <div class="price">
+          <span class="now-price">￥<span>{{ item.goodsNewPrice }}</span></span>
+          <span class="del-price">￥{{ item.goodsOldPrice }}</span>
         </div>
-        <div class="item-detail">
-          <div class="product-title">{{ item.name }}</div>
-          <div class="price">
-            <span class="now-price">￥<span>{{ item.id }}</span></span>
-            <span class="del-price">￥{{ item.id }}</span>
-          </div>
-        </div>
-    </a>
+      </div>
+    </router-link>
   </div>
 </template>
 
@@ -33,13 +32,17 @@ export default {
         return {
 
         }
-    }
+    },
+    // created() {
+    //   console.log();
+    // }
 }
 </script>
 
 <style lang="scss" scoped>
   #home-page {
     position: relative;
+    background: #f5f5f5;
 
     .tab-title{
       height: 0.44rem;
@@ -52,11 +55,16 @@ export default {
     .link-item {
       display: block;
       margin-bottom: 0.08rem;
+      background: #fff;
 
-        .pic-wrapper {
-          height: 1.3rem;
-          background: skyblue;
+      .pic-wrapper {
+        height: 1.3rem;
+        // background: skyblue;
+
+        img {
+          height: 100%;
         }
+      }
     }
 
     .good-item {

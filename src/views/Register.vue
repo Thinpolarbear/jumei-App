@@ -9,13 +9,13 @@
     />
     <van-form @submit="onSubmit" id="registerForm">
         <div class="title">
-            <span>使用手机号码注册</span>
+            <span>账号注册</span>
         </div>
         <van-field
             v-model="username"
             name="username"
-            placeholder="请输入11位手机号"
-            :rules="[{ required: true, message: '请填写手机号' }]"
+            placeholder="请输入账号"
+            :rules="[{ required: true, message: '请填写账号' }]"
         />
         <van-field
             v-model="password"
@@ -24,6 +24,15 @@
             placeholder="6-16位登录密码"
             :rules="[{ required: true, message: '请填写密码' }]"
         />
+         <van-field
+            class="checkCode"
+            v-model="checkCode"
+            type="text"
+            name="checkCode"
+            placeholder="请输入下图验证码"
+            :rules="[{ required: true, message: '请填写验证码' }]"
+        />
+        <img :src="checkImg" alt="" @click="changeSrc">
         <div style="margin: 16px;">
             <van-button round block type="info" native-type="submit" color="#feb2c5">
             注册
@@ -42,13 +51,18 @@ export default {
         return {
         username: '',
         password: '',
+        checkCode : '',
+        checkImg: '',
         };
+    },
+    created() {
+        this.changeSrc()
     },
     methods: {
         changeState() {
             this.$router.push('/login')
         },
-         goBack() {
+        goBack() {
             history.go(-1)
         },
         onSubmit(values) {
@@ -56,12 +70,21 @@ export default {
             this.$axios.post('/api/users/register',{
                 username : this.username,
                 password : this.password,
+                checkCode : this.checkCode
             }).then(res => {
-                console.log(res);
+                if(res.data.code == "0") {
+                    this.$notify({type : 'success', message : '注册成功'});
+                    this.$router.push('/login');
+                } else {
+                    this.$notify({type : 'danger', message : '验证码错误或账号已存在'})
+                }
             }).catch(err => {
-                console.log(err);
+                    this.$notify({type : 'danger', message : '注册失败'})
             })
         },
+        changeSrc() {
+            this.checkImg='/api/users/checkCode?'+Math.random()
+        }
     },
 }
 </script>

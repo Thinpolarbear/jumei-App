@@ -70,9 +70,29 @@ export default {
     return {
       value: '',
       activeName: 'a',
-      linkList: 5,
-      goodList: [{id:1001,name:'保湿霜'},{id:1002,name:'防晒霜'},{id:1003,name:'洁面乳'}],
+      linkList: [],
+      goodList: [],
     }
+  },
+  created() {
+    this.$axios.get('/api/post/list',{ params : {goodsType: '首页' } }).then(res => {
+      this.goodList = res.data.info
+      this.goodList.forEach((item,index) => {
+        if(this.goodList[index].imageUrl) {
+          this.goodList[index].imageUrl = item.imageUrl.replace('localhost','10.20.159.146')
+        }
+      })
+    }).catch(err => {
+      console.log(err);
+    });
+
+    this.$axios.get('/api/active/list',{ params : {
+      activeType : "首页"
+    } }).then(res => {
+      this.linkList = res.data.info;
+    }).catch(err => {
+      console.log(err);
+    })
   }
 }
 </script>

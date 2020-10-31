@@ -7,8 +7,8 @@
       <span>全球热销品牌</span>
     </h2>
     <div class="hot clear">
-      <a href="javascript:void(0)" v-for="item in 8" :key="item">
-        <img src="http://mp6.jmstatic.com/mobile/card_material/item_2386_512_512-ipad2048_1593481826.jpeg?imageView2/2/w/160/q/90" alt="">
+      <a href="javascript:void(0)" v-for="item in hotList" :key="item.src">
+        <img :src="item.src" alt="">
       </a>
     </div>
     <h2 class="text">
@@ -23,7 +23,7 @@
           <div class="list-img">
             <img :src="item.activeImage && item.activeImage.replace('localhost','10.20.159.146')">
             <div class="discount">
-              <p>满199减100</p>
+              <p>{{ item.disCount }}</p>
             </div>
           </div>
           <div class="list-info">
@@ -43,14 +43,22 @@
 export default {
   data() {
     return {
+      hotList: [
+        {src : 'http://mp6.jmstatic.com/mobile/card_material/item_2386_512_512-ipad2048_1593481826.jpeg?imageView2/2/w/160/q/90'},
+        {src : 'http://mp6.jmstatic.com/mobile/card_material/item_2386_512_512-ipad2048_1502086238.jpeg?imageView2/2/w/160/q/90'},
+        {src : 'http://mp6.jmstatic.com/mobile/card_material/item_2386_512_512-ipad2048_1595239672.jpeg?imageView2/2/w/160/q/90'},
+        {src : 'http://mp6.jmstatic.com/mobile/card_material/item_2386_512_512-ipad2048_1498543566.jpeg?imageView2/2/w/160/q/90'},
+        {src : 'http://mp6.jmstatic.com/mobile/card_material/item_2386_512_512-ipad2048_1563960647.jpeg?imageView2/2/w/160/q/90'},
+        {src : 'http://mp5.jmstatic.com/mobile/card_material/item_2386_512_512-ipad2048_1597628687.jpeg?imageView2/2/w/160/q/90'},
+        {src : 'http://mp5.jmstatic.com/mobile/card_material/item_2386_512_512-ipad2048_1595310899.jpeg?imageView2/2/w/160/q/90'},
+        {src : 'http://mp5.jmstatic.com/mobile/card_material/item_2386_512_512-ipad2048_1602468872.jpeg?imageView2/2/w/160/q/90'},
+      ],
       list : [],
     }
   },
   created() {
     this.$axios.get('/api/active/list',{ params : { activeType : "母婴" } }).then(res => {
-      console.log(res.data);
       this.list = res.data.info;
-      console.log(this.list);
     }).catch(err => {
       console.log(err);
     })

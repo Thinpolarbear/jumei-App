@@ -2,10 +2,10 @@
   <div id="fast-page">
       <section>
           <ul>
-              <li v-for="item in 4" :key="item">
+              <li v-for="item in topList" :key="item.src">
                   <a href="">
-                      <img src="//mp5.jmstatic.com/mobile/other/detail_page_guarantee/global_delivery.png?imageView2/2/w/51/q/70" alt="">
-                      <div class="text">快速到货</div>
+                      <img :src="item.src" alt="">
+                      <div class="text">{{ item.text }}</div>
                   </a>
               </li>
           </ul>
@@ -19,11 +19,11 @@
           </div>
           <ul class="list">
               <li v-for="item in list" :key="item.id">
-                  <a href="javascript:void(0)">
+                  <a :href="'/detail/'+item.postId">
                     <div class="product-info clear">
                         <div class="product-img">
                             <img src="http://p0.jmstatic.com/banner/area/000/000/020.jpg" alt="" class="label">
-                            <img src="http://mp5.jmstatic.com/product/005/066/5066168_std/5066168_1000_1000.jpg?v=1572242688&imageView2/2/w/264/q/90" alt="" class="main">
+                            <img :src="item.imageUrl&&item.imageUrl.replace('localhost','10.20.159.146')" alt="" class="main">
                         </div>
                         <div class="product-desc">
                             <div class="name">
@@ -47,6 +47,12 @@ export default {
     data() {
         return {
             list: [],
+            topList: [
+                { src : '//mp5.jmstatic.com/mobile/other/detail_page_guarantee/interantion_shipping.png?imageView2/2/w/51/q/70', text : '海外直供' },
+                { src : '//mp5.jmstatic.com/mobile/other/detail_page_guarantee/genuine_guarantee.png?imageView2/2/w/51/q/70', text : '原装正品' },
+                { src : '//mp5.jmstatic.com/mobile/other/detail_page_guarantee/global_delivery.png?imageView2/2/w/51/q/70', text : '快速到货' },
+                { src : '//mp5.jmstatic.com/mobile/other/detail_page_guarantee/return_guarantee_7.png?imageView2/2/w/51/q/70', text : '轻松退货' },
+            ],
         }
     },
     created() {

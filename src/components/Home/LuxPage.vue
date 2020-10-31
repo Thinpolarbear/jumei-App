@@ -7,20 +7,20 @@
         <span>精选活动</span>
       </h2>
       <ul class="list">
-          <li v-for="item in list" :key="item">
+          <li v-for="item in list" :key="item.postId">
               <a href="javascript:void(0)" class="clear">
                   <div class="list-img">
-                      <img src="http://mp5.jmstatic.com//jmstore/image/000/004/4369_std/5f901cdfd463a_2048_1024.jpg?1603281480&imageView2/2/w/640/q/90" alt="">
+                      <img :src="item.activeImage && item.activeImage.replace('localhost','10.20.159.146')" alt="">
                       <div class="discount">
-                          <p>全场2.1折起</p>
+                          <p>{{ item.disCount }}</p>
                       </div>
                   </div>
                   <div class="list-info">
-                      <p class="title">CK品牌内衣专场</p>
+                      <p class="title">{{ item.activeName }}</p>
                       <p class="time">剩余<span>01天</span><span>09时</span></p>
                   </div>
                   <div class="list-logo">
-                      <img src="http://p0.jmstatic.com/brand/logo_180/9356.jpg" alt="">
+                      <img :src="item.smIcon" alt="">
                   </div>
               </a>
           </li>
@@ -34,6 +34,15 @@ export default {
     return {
       list : 5,
     }
+  },
+  created() {
+    this.$axios.get('/api/active/list',{ params : {
+      activeType : '轻奢'
+    } }).then(res => {
+      this.list = res.data.info;
+    }).catch(err => {
+      console.log(err);
+    })
   }
 }
 </script>

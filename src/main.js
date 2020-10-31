@@ -7,6 +7,13 @@ import Vant from 'vant';
 import 'vant/lib/index.css';
 import axios from 'axios'
 
+import Router from 'vue-router'
+
+const originalPush = Router.prototype.push
+Router.prototype.push = function push(location) {
+  return originalPush.call(this, location).catch(err => err)
+}
+
 // axios.interceptors.request.use(config => {
 //   config.headers.token = localStorage.getItem('token');
 //   return config;

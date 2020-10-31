@@ -1,17 +1,20 @@
 <template>
   <div id="app">
-    <router-view/>
-    <van-tabbar active-color="rgb(254, 64, 112)" route v-if="$route.path !=='/login' && $route.path !=='/register'">
-      <van-tabbar-item replace to="/home" icon="home-o">
+    <keep-alive>
+      <router-view/>
+    </keep-alive>
+    
+    <van-tabbar v-model="active" active-color="rgb(254, 64, 112)" v-if="$route.path !=='/login' && $route.path !=='/register'">
+      <van-tabbar-item to="/home" name="home" icon="home-o">
         首页
       </van-tabbar-item>
-      <van-tabbar-item replace to="/group" icon="friends-o">
+      <van-tabbar-item to="/group" name="group" icon="friends-o">
         团购
       </van-tabbar-item>
-      <van-tabbar-item replace to="/shopcart" icon="shopping-cart-o">
+      <van-tabbar-item to="/shopcart" name="shopcart" icon="shopping-cart-o">
         购物车
       </van-tabbar-item>
-      <van-tabbar-item replace to="/mine" icon="manager-o">
+      <van-tabbar-item to="/mine" name="mine" icon="manager-o">
         我的
       </van-tabbar-item>
     </van-tabbar>
@@ -22,11 +25,11 @@
 export default {
   data() {
     return {
-      
+      active : 'home'
     }
   },
   created() {
-    // this.$axios.post('/api')
+    this.$parent.active = this.$route.path.split('/')[1];
   }
 }
 </script>

@@ -95,6 +95,10 @@ export default {
 </script>
 
 <style>
+    #login {
+        background: #fff;
+    }
+
     #loginForm {
         position: relative;
         width: 80%;

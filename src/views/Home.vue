@@ -6,28 +6,28 @@
       </a>
       <van-icon class="search" name="points" size="0.26rem" />
     </header>
-    <van-tabs v-model="activeName" sticky :ellipsis="false" line-width="50px">
-      <van-tab title="首页" name="a">
+    <van-tabs v-model="activeName" sticky :ellipsis="false" line-width="50px" @change="routerTo">
+      <van-tab title="首页" name="index">
         <div class="content">
           <home-page :linkList="linkList" :goodList="goodList"></home-page>
         </div>
       </van-tab>
-      <van-tab title="极速免税店" name="b">
+      <van-tab title="极速免税店" name="fast">
         <div class="content">
           <fast-page></fast-page>
         </div>
       </van-tab>
-      <van-tab title="母婴" name="c">
+      <van-tab title="母婴" name="infant">
         <div class="content">
           <infant-page></infant-page>
         </div>
       </van-tab>
-      <van-tab title="轻奢" name="d">
+      <van-tab title="轻奢" name="lux">
         <div class="content">
           <lux-page></lux-page>
         </div>
       </van-tab>
-      <van-tab title="名品特卖" name="e">
+      <van-tab title="名品特卖" name="famous">
         <div class="content">
           <famous-page></famous-page>
         </div>
@@ -69,7 +69,7 @@ export default {
   data() {
     return {
       value: '',
-      activeName: 'a',
+      activeName: this.$route.params.active,
       linkList: [],
       goodList: [],
     }
@@ -92,7 +92,13 @@ export default {
       this.linkList = res.data.info;
     }).catch(err => {
       console.log(err);
-    })
+    });
+    this.$parent.active = this.$route.path.split('/')[1];
+  },
+  methods: {
+    routerTo(name,title) {
+      this.$router.push('/home/'+name);
+    }
   }
 }
 </script>
@@ -136,7 +142,7 @@ export default {
   }
 
   footer {
-    padding: 0 .01rem 47px;
+    padding: 0 .01rem .1rem;
 
     img {
       width: 100%;

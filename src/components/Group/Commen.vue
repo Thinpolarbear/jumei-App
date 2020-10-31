@@ -1,23 +1,26 @@
 <template>
     <ul id="group">
-        <li v-for="item in goodList" :key="item.id">
-            <a href="item.href">
-                <div class="comment">{{ item.comment }}条评论</div>
+        <li v-for="item in list" :key="item.postId">
+            <a :href="'/group-detail/'+item.postId">
+                <div class="comment" v-if="type != 'next'">{{ parseInt(item.buyNumber/2) }}条评论</div>
                 <div class="good-img">
-                    <img :src="item.goodImg" alt="">
+                    <img :src="item.imageUrl.replace('localhost','10.20.159.146')" alt="">
                 </div>
                 <div class="good-info">
-                    <span>[{{ item.goodNum }}人团]</span>
-                    {{ item.goodName }}
+                    <span>[2人团]</span>
+                    {{ item.goodsName }}
                 </div>
                 <div class="good-price clear">
                     <div class="left">
-                        <span class="group-price">￥{{ item.price1 }}</span>
-                        <span class="single-price">单买价￥{{ item.price2 }}</span>
+                        <span class="group-price">￥{{ item.goodsNewPrice }}</span>
+                        <span class="single-price">单买价￥{{ item.goodsOldPrice }}</span>
                     </div>
                     <div class="right">
-                        <span class="group-btn">
+                        <span class="group-btn" v-if="type != 'next'">
                             去开团
+                        </span>
+                        <span class="group-btn" v-else>
+                            每天早上十点开团
                         </span>
                     </div>
                 </div>
@@ -28,16 +31,13 @@
 
 <script>
 export default {
-    props: ['type'],
+    props: ['type','list'],
     data() {
         return {
-            goodList : [
-                { id : 1001,href: 'javascript:void(0)', comment:'135', goodImg : 'http://mp5.jmstatic.com/product/005/034/5034738_std/5034738_1000_1000.jpg?v=1598239353&imageView2/2/w/440/q/90', goodNum : 2, goodName : '【手机专享】【2件装】大米面膜 10片/袋', price1 : 92, price2 : 178},
-                { id : 1002,href: 'javascript:void(0)', comment:'135', goodImg : 'http://mp5.jmstatic.com/product/005/034/5034738_std/5034738_1000_1000.jpg?v=1598239353&imageView2/2/w/440/q/90', goodNum : 2, goodName : '【手机专享】【2件装】大米面膜 10片/袋', price1 : 92, price2 : 178},
-                { id : 1003,href: 'javascript:void(0)', comment:'135', goodImg : 'http://mp5.jmstatic.com/product/005/034/5034738_std/5034738_1000_1000.jpg?v=1598239353&imageView2/2/w/440/q/90', goodNum : 2, goodName : '【手机专享】【2件装】大米面膜 10片/袋', price1 : 92, price2 : 178},
-                { id : 1004,href: 'javascript:void(0)', comment:'135', goodImg : 'http://mp5.jmstatic.com/product/005/034/5034738_std/5034738_1000_1000.jpg?v=1598239353&imageView2/2/w/440/q/90', goodNum : 2, goodName : '【手机专享】【2件装】大米面膜 10片/袋', price1 : 92, price2 : 178},
-            ]
+
         }
+    },
+    created() {
     }
 }
 </script>
@@ -124,9 +124,9 @@ export default {
                         .group-btn {
                             display: block;
                             height: 0.26rem;
+                            padding: 0 .05rem;
                             line-height: 0.26rem;
                             font-size: 0.14rem;
-                            width: .75rem;
                             text-align: center;
                             color: #fff;
                         }

@@ -20,10 +20,18 @@ const routes = [
   },
   {
     path: '/home',
+    redirect: '/home/index'
+  },
+  {
+    path: '/home/:active',
     component: () => import('../views/Home')
   },
   {
     path: '/group',
+    redirect: '/group/rec'
+  },
+  {
+    path: '/group/:active',
     component: () => import('../views/Group')
   },
   {
@@ -37,6 +45,11 @@ const routes = [
   {
     path: '/detail/:postId',
     component: () => import('../views/Detail'),
+    props: true,
+  },
+  {
+    path: '/group-detail/:postId',
+    component: () => import('../views/GroupDetail'),
     props: true,
   },
 ]

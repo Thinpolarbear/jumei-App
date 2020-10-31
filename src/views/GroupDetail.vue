@@ -2,7 +2,7 @@
   <div id="detail" class="single-page">
     <header>
       <div class="left">
-        <a href="javascript:history.go(-1);">&nbsp;</a>
+        <a href="javascript:void(0)" @click="back">&nbsp;</a>
       </div>
       <div class="center">{{ goodInfo.goodsName }}</div>
       <div class="right">
@@ -21,13 +21,13 @@
 
     <div class="price-info clear">
         <span class="cur-price">￥{{ goodInfo.goodsNewPrice }}</span>
+        <span class="desc">单买价</span>
         <span class="del-price">￥{{ goodInfo.goodsOldPrice }}</span>
-        <span class="desc">已含税</span>
-        <span class="person">{{ goodInfo.buyNumber }}人已购买</span>
+        <span class="person">已有{{ goodInfo.buyNumber }}人参与</span>
     </div>
 
     <div class="good-name">
-        <span>聚美自营</span>
+        <span>【2人团】</span>
         {{ goodInfo.goodsName }}
     </div>
 
@@ -116,43 +116,18 @@
                     <span class="icon">官方授权</span>
                 </div>
             </div>
-            <div class="btn-enter">
+            <!-- <div class="btn-enter">
                 <p class="shop-btn">
                     进入店铺
                 </p>
-            </div>
+            </div> -->
         </a>
     </div>
 
     <div class="operation">
-        <div class="add" @click="changeShow">加入购物车</div>
-        <div class="buy" @click="changeShow">立即购买</div>
+        <div class="add">单独购买 ￥<span>{{ goodInfo.goodsOldPrice }}</span></div>
+        <div class="buy">参团购买 ￥<span>{{ goodInfo.goodsNewPrice }}</span></div>
     </div>
-
-    <van-action-sheet v-model="show">
-        <div class="model">
-            <div class="title clear">
-                <div class="good-img">
-                    <img :src="goodInfo.banner[0]" alt="">
-                </div>
-                <div class="good-info">
-                    <h2 class="good-price">￥{{ goodInfo.goodsNewPrice }}</h2>
-                </div>
-            </div>
-            <div class="buy-num clear">
-                <span class="title-name">购买数量</span>
-                <div class="sub-add clear">
-                    <button class="sub" @click="subAction"></button>
-                    <span>{{ num }}</span>
-                    <button class="add" @click="addAction"></button>
-                </div>
-            </div>
-            <div class="operation">
-                <div class="add" @click="changeShow">加入购物车</div>
-                <div class="buy" @click="changeShow">立即购买</div>
-            </div>
-        </div>
-    </van-action-sheet>
   </div>
 </template>
 
@@ -161,13 +136,8 @@ export default {
     props: ['postId'],
     data() {
         return {
-            goodInfo: {
-                banner : [],
-            },
+            goodInfo: [],
             showExtend: false,
-            show : true,
-            num : 1,
-
         }
     },
     created() {
@@ -186,22 +156,8 @@ export default {
         isExtend() {
             this.showExtend = !this.showExtend;
         },
-        changeShow() {
-            this.show = !this.show
-        },
-        subAction() {
-            if(this.num > 1) {
-                this.num--
-            } else {
-                this.$toast('商品数量不能为零')
-            }
-        },
-        addAction() {
-            if(this.num < 10) {
-                this.num++
-            } else {
-                this.$toast('限购十件');
-            }
+        back() {
+            this.$router.go(-1);
         }
     }
 }
@@ -300,23 +256,22 @@ export default {
                 float: left;
                 font-size: 0.27rem;
                 line-height: .27rem;
+                margin-right: .05rem;
                 color: #F33873;
             }
 
             .del-price {
                 float: left;
-                margin-left: .04rem;
                 color: #666666;
                 font-size: .14rem;
                 line-height: .14rem;
                 margin-top: .1rem;
-                text-decoration: line-through;
             }
 
             .desc {
                 float: left;
                 margin-left: .04rem;
-                margin-top: .08rem;
+                margin-top: .1rem;
                 font-size: .14rem;
                 line-height: .14rem;
                 color: #666666;
@@ -515,6 +470,10 @@ export default {
             background: skyblue;
             text-align: center;
 
+            span {
+                font-size: .18rem;
+            }
+
             div {
                 display: inline-block;
                 line-height: .5rem;
@@ -557,7 +516,7 @@ export default {
                     .shop-name {
                         float: left;
                         margin-left: .1rem;
-                        padding-top: .04rem;
+                        padding-top: .12rem;
                         line-height: .16rem;
                         font-size: .14rem;
                         color: #333;
@@ -607,98 +566,6 @@ export default {
                         color: #666;
                         position: relative;
                         border: 1px solid #ddd;
-                    }
-                }
-            }
-        }
-
-        .van-popup {
-            overflow: visible;
-        }
-
-        .model {
-            height: 3.35rem;
-            padding: 0 .12rem;
-
-            .title {
-                position: relative;
-                padding-bottom: 0.15rem;
-
-                .good-img {
-                    float: left;
-                    width: 1rem;
-                    height: .8rem;
-
-                    img {
-                        width: 1rem;
-                        height: 1rem;
-                        box-shadow: 1px 4px 5px rgba(0, 0, 0, 0.11);
-                        margin-top: -.2rem;
-                    }
-                }
-
-                .good-info {
-                    float: left;
-                    width: 2.3rem;
-                    margin-left: .13rem;
-                    padding-top: .215rem;
-
-                    h2 {
-                        font-size: 0.2133rem;
-                        line-height: 0.2133rem;
-                        font-weight: normal;
-                    }
-                }
-            }
-
-            .buy-num {
-                border-top: 1px solid #EEEEEE;
-                border-bottom: 1px solid #EEEEEE;
-                padding-top: .15rem;
-                padding-bottom: .15rem;
-                margin-bottom: .175rem;
-
-                .title-name {
-                    float: left;
-                    color: #999999;
-                    text-align: left;
-                    font-size: .13rem;
-                    margin-top: .03rem;
-                    padding: 0;
-                    width: auto;
-                    max-width: 60%;
-                    overflow: hidden;
-                    max-height: .17rem;
-                }
-
-                .sub-add {
-                    text-align: right;
-
-                    button {
-                        width: .22rem;
-                        height: .22rem;
-                        display: inline-block;
-                        border: none;
-                        vertical-align: middle;
-                    }
-
-                    span {
-                        display: inline-block;
-                        width: .44rem;
-                        color: #333333;
-                        font-size: .12rem;
-                        text-align: center;
-                        vertical-align: middle;
-                    }
-
-                    .sub {
-                        background: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACwAAAAsCAYAAAAehFoBAAAAAXNSR0IArs4c6QAAAwxJREFUWAnVmT9v00AYxm2HIckQqRvK6IFPUIlWAiYGpIoOSPRb8CdD+yHKAKXfokgdgioxMFEkQOILwOCxdKuUIcnimOexfKeze7Vzydk5n2Sd7bt773dvnvdiv/a9NUqSJP5sNnuIes/3/RCmhsqR4Pwfjise6BOhz0Wv1/uFmm0rFX+VUfP5/Gkcxy8xdh/HfUMb1+g/7nQ6n7rd7lfDsZ4R8HQ63cEEx/DWY9OJdP3h6UvcP+r3+z917bp7SwHDo+FisXgH0Bc6I+veA/h5EASH8HhUZasSOPv5z2Boq8rYmu03kMlBlUyCskkggVfw7JcGYImxxbk4ZxnTnR7GwA+QwJuywXW1QSIn0PVbnX0tMFcJ2I+6AU3dA/RrQJ8W57sFTM3ypwFwp9i5yWsAxwjEZ0VN54C5G2B//Q2wugNs2bUzELfV3SMXdNy6HILlohiIZJJFehi63YEMfsgWh04gj13x56J6OLcSh3iJItlSYAYavPvIMUiJQzYy8kYKjEA7kK2OnmQPW14Aeur4uaOcKtY+WX2Xg02l5TmDjx7eKza4ek3WANShq4BFLrIy6Pha05YybB3wPbjWyMNRFHmTycTKLzIYDLwwNFJk6uGV32CtUJsZSbit/UH0PTAbt5neCLq/1DDzBm0pV+0DhhwqX61dcT9Z+cdx4QpQFQdZfVAz8Khj05RTlX3b7dd4iB/Sw9zWxrat12BvTFYGncfEXA0TWDUpGNV3um+Qh5Ukn1VSGINnLyGHJ7Sbejib4CirXawkmwTmWylWcu4aLZnEGzPZpCR40bpECjMsTHliVTEXsMlCBrKoWR/ySEkIuCyXNRLXG6xHGUsO4RYwW6GZU6zwJNezwQvOTQbdlDkNFzvgH5DJ5ffY7hrJZGZSHN0FS75SYHZgxgVJjHZ8MiAwdQTxb2P1tW15tM05dJolg1oqPax2ZtIF1/yaZCUPB9DvsHeo7rPqfLpzI2BhIJMJ83FMcZk+5fHD4md49GwZj4o5Rb0SsBjMR9OST7fsln62ZY2+Vj7d/gfn0SvnVp6oMQAAAABJRU5ErkJggg==') center center no-repeat;
-                        background-size: 100% 100%;
-                    }
-
-                    .add {
-                        background: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACwAAAAsCAYAAAAehFoBAAAAAXNSR0IArs4c6QAAA6lJREFUWAnVmb9PFEEUx2+Xgh/BWnIlJFZ2FlJooomVRIiF/hWaaKGdCbVoJNG/QkMUDFQmJkihBZ0NBZQnUNAgByRw6/czzLus2ePH7AK3O8nwhtk373323fzamahWICVJEu3u7t6UHIuiaFim6qmcqPxHuUGWzpp05vv7+39J8ixXivK02tvbu3d4ePhIbceVhwJtrEt/rqen51NfX9+3wLa1IOBmszkqB68VrdvmSNFaVXlWclmyIdno7e0lqrX9/f26dF3UJW+oakJyhGck6f6QeDkwMPDTVZzXH0V0WLAzOzs7ic8b6gqvBHQ91AdtaCs7G2YP2/gItdVRn59fhrcwLsPbkpOK0mBH5YBKbGDL2yQQW/gKMJFVlbGnygcedkZOrma1itVgUz7cr4cvfOayqIbTHrRFJGQ4qL+HOMU2PuQTX/yS0yHta7ylb6hik9ngUhK+cOh9ny3S9CO14adpKV8arEUEn973wal9WgrDejs3wCQnzchlS3wTZVhgOta/3sw6PwPswvrssQD+Ab7TLB31pTDKW0luq0Gh2SC5+3ye3NHRGSthgMUzsWC5FFtBcoqyFN9qBdpI1QcXZeM+ObhhqgEMsPgqx0bZAdO59fCW/t/UMvnGK3VdeJZN2GwAOmBtZB5DF8fxe73Z366TegBYxPSBf/1mqxaLnsH1gEo9/IIsUxLTZ88zDmvMflYVQ3qbVe2yfpcJFhaYYIMRViI85iFnvSyjcGywxqJ3E7PkchlJYTI2WBl0bLBJbtN9VCzdX2Ort4FFb5Wlo02x1VkCWdkGNedd0YNTpzS3ihVcFCwi8rcQfX9nY8iqMxI+OOEjwvYF27W9Q4YwW2FsCXvfFdZrrSTXsnr5alp3niXkfK2zrWDze4oVIuz6rsJugy/boss1KbZGG1hMpQVOsTVYONYIoCTnBqVMxgYrC4ftWydKSXsE5dhgjTnrUt266EfyHIxc9EvCBBuMsBJhRvMcjlut1kNkmVKKaQ5WBl2NgzmkHj7R2xQ+1ZHhBTI2iyRYYMKGMbbtaT5eZK5TnmxXdrkAi59/FzMoAj63j9CM8RwVim7Hj9D/TAm6Op/5kGsJrNZBioeuzlGV9Q91jeocBqagq3PcmoKuzoG2QXPiormwGlcGKejSXMrYp4exnShZXKQwpUmdcziXtAQXufZakpEX+p4887VXELBnZL7mYpHzOI648lwsftXe4OOFXywasElF+qSrW9T4/HJZuudydfsPkjSrGlD8xloAAAAASUVORK5CYII=') center center no-repeat;
-                        background-size: 100% 100%;
                     }
                 }
             }

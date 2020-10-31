@@ -1,20 +1,20 @@
 <template>
   <div id="famous-product">
       <ul class="list">
-          <li v-for="item in list" :key="item">
+          <li v-for="item in list" :key="item.postId">
               <a href="javascript:void(0)" class="clear">
                   <div class="list-img">
-                      <img src="http://mp5.jmstatic.com//jmstore/image/000/006/6415_std/5f8d7366a4722_2048_1024.jpg?1603108167&imageView2/2/w/640/q/90" alt="">
+                      <img :src="item.activeImage && item.activeImage.replace('localhost','10.20.159.146')" alt="">
                       <div class="discount">
-                          <p>99元任选14件</p>
+                          <p>{{ item.disCount }}</p>
                       </div>
                   </div>
                   <div class="list-info">
-                      <p class="title">百草味品牌专场</p>
+                      <p class="title">{{ item.activeName }}</p>
                       <p class="time">剩余<span>01天</span><span>09时</span></p>
                   </div>
                   <div class="list-logo">
-                      <img src="http://p0.jmstatic.com/brand/logo_180/16582.jpg" alt="">
+                      <img :src="item.smIcon" alt="">
                   </div>
               </a>
           </li>
@@ -26,9 +26,18 @@
 export default {
     data() {
         return {
-            list : 5
+            list : [],
         }
-    }
+    },
+  created() {
+    this.$axios.get('/api/active/list',{ params : {
+      activeType : '名品特卖'
+    } }).then(res => {
+      this.list = res.data.info;
+    }).catch(err => {
+        console.log(err);
+    })
+  }
 }
 </script>
 
